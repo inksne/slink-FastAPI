@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SLink - Укорачиваем ссылки{% endblock %}</title>
+    {% block styles %}
+        <style>
+            :root {
+                --primary: #2563eb;
+                --primary-dark: #1d4ed8;
+                --dark-bg: #121826;
+                --card-bg: #1f2937;
+                --text: #f9fafb;
+                --text-secondary: #9ca3af;
+                --success: #10b981;
+                --error: #ef4444;
+            }
+            
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background: linear-gradient(135deg, var(--dark-bg) 0%, #0d1117 100%);
+                color: var(--text);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                min-height: 100vh;
+                line-height: 1.6;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+
+            /* Навигация */
+            nav {
+                background: rgba(31, 41, 55, 0.8);
+                backdrop-filter: blur(10px);
+                padding: 1rem 0;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .nav-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .logo {
+                display: flex;
+                align-items: center;
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--text);
+                text-decoration: none;
+            }
+
+            .logo-icon {
+                margin-right: 10px;
+                font-size: 1.8rem;
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 1.5rem;
+            }
+
+            .nav-links a {
+                color: var(--text);
+                text-decoration: none;
+                font-weight: 500;
+                transition: color 0.3s;
+                position: relative;
+                padding: 5px 0;
+            }
+
+            .nav-links a:hover {
+                color: var(--primary);
+            }
+
+            .nav-links a::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: var(--primary);
+                transition: width 0.3s;
+            }
+
+            .nav-links a:hover::after {
+                width: 100%;
+            }
+
+            main {
+                padding: 4rem 0;
+                flex: 1;
+            }
+
+            .form-group {
+                margin-bottom: 1.5rem;
+            }
+
+            .form-label {
+                display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 500;
+            }
+
+            .input-group {
+                display: flex;
+                gap: 10px;
+            }
+
+            .url-input {
+                flex: 1;
+                padding: 15px;
+                border: 2px solid rgba(255, 255, 255, 0.1);
+                background: rgba(31, 41, 55, 0.5);
+                border-radius: 12px;
+                color: var(--text);
+                font-size: 1rem;
+                transition: border-color 0.3s;
+            }
+
+            .url-input:focus {
+                outline: none;
+                border-color: var(--primary);
+            }
+
+            .btn {
+                background: var(--primary);
+                color: white;
+                border: none;
+                padding: 15px 30px;
+                border-radius: 12px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background 0.3s, transform 0.2s;
+                font-size: 1rem;
+            }
+
+            .btn:hover {
+                background: var(--primary-dark);
+                transform: translateY(-2px);
+            }
+
+            .btn:active {
+                transform: translateY(0);
+            }
+
+            footer {
+                background: var(--card-bg);
+                padding: 3rem 0 2rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .footer-content {
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 2rem;
+            }
+
+            .footer-section {
+                flex: 1;
+                min-width: 250px;
+            }
+
+            .footer-title {
+                font-size: 1.2rem;
+                margin-bottom: 1.5rem;
+                position: relative;
+            }
+
+            .footer-title::after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 40px;
+                height: 2px;
+                background: var(--primary);
+            }
+
+            .footer-links {
+                list-style: none;
+            }
+
+            .footer-links li {
+                margin-bottom: 0.8rem;
+            }
+
+            .footer-links a {
+                color: var(--text-secondary);
+                text-decoration: none;
+                transition: color 0.3s;
+            }
+
+            .footer-links a:hover {
+                color: var(--primary);
+            }
+
+            .copyright {
+                text-align: center;
+                margin-top: 3rem;
+                padding-top: 2rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+                color: var(--text-secondary);
+            }
+
+            @media (max-width: 768px) {
+                .nav-links {
+                    gap: 1rem;
+                }
+                
+                .input-group {
+                    flex-direction: column;
+                }
+                
+                .btn {
+                    width: 100%;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .nav-container {
+                    flex-direction: column;
+                    gap: 1rem;
+                }
+                
+                .nav-links {
+                    width: 100%;
+                    justify-content: center;
+                }
+            }
+        </style>
+    {% endblock %}
+</head>
+<body>
+    <nav>
+        <div class="container nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">🔗</span>
+                SLink
+            </a>
+            <div class="nav-links">
+                <a href="/">Главная</a>
+                <a href="/about_us">О нас</a>
+                <a href="/jwt/login/">Войти</a>
+                <a href="/jwt/register">Зарегистрироваться</a>
+            </div>
+        </div>
+    </nav>
+    
+    <main>
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="footer-title">SLink</h3>
+                    <p>Сервис для сокращения длинных URL-адресов.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Навигация</h3>
+                    <ul class="footer-links">
+                        <li><a href="/">Главная</a></li>
+                        <li><a href="/about_us">О нас</a></li>
+                        <li><a href="/jwt/login/">Войти</a></li>
+                        <li><a href="/jwt/register">Зарегистрироваться</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2025 SLink. Все права защищены.
+            </div>
+        </div>
+    </footer>
+
+    {% block scripts %}
+        <script>
+            function isValidUrl(string) {
+                try {
+                    new URL(string);
+                    return true;
+                } catch (_) {
+                    return false;  
+                }
+            }
+        </script>
+    {% endblock %}
+</body>
+</html>

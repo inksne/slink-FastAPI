@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}Главная | SLink{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <style>
+        .hero {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .shortener-box {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .result-box {
+            margin-top: 2rem;
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .result-title {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .short-url {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(31, 41, 55, 0.5);
+            border-radius: 8px;
+            padding: 12px 15px;
+        }
+
+        .short-url a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .copy-btn {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--text-secondary);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .shortener-box {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="hero">
+        <h1>Сокращайте, делитесь, отслеживайте</h1>
+        <p>SLink помогает превратить длинные ссылки в короткие, удобные для публикации URL-адреса</p>
+    </section>
+    
+    <section class="shortener-box">
+        <div class="form-group">
+            <label for="url-input" class="form-label">Введите ссылку для сокращения:</label>
+            <div class="input-group">
+                <input 
+                    type="url" 
+                    id="url-input" 
+                    class="url-input" 
+                    placeholder="https://example.com/very-long-url..."
+                    required
+                >
+                <button class="btn" id="shorten-btn">Сократить</button>
+            </div>
+            <div class="loading" id="loading">Создаем ссылку...</div>
+        </div>
+        
+        <div class="result-box" id="result-box">
+            <div class="result-title">Ваша сокращенная ссылка:</div>
+            <div class="short-url">
+                <a href="#" id="short-url" target="_blank"></a>
+                <button class="copy-btn" id="copy-btn">Копировать</button>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlInput = document.getElementById('url-input');
+            const shortenBtn = document.getElementById('shorten-btn');
+            const resultBox = document.getElementById('result-box');
+            const shortUrl = document.getElementById('short-url');
+            const copyBtn = document.getElementById('copy-btn');
+            const loading = document.getElementById('loading');
+
+            function isValidUrl(url) {
+                try {
+                    new URL(url);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            function cleanResponse(text) {
+                return text.replace(/^"|"$/g, '');
+            }
+
+            shortenBtn.addEventListener('click', async function() {
+                const longUrl = urlInput.value.trim();
+                
+                if (!longUrl) {
+                    alert('Пожалуйста, введите ссылку');
+                    urlInput.focus();
+                    return;
+                }
+                
+                if (!isValidUrl(longUrl)) {
+                    alert('Пожалуйста, введите корректный URL');
+                    urlInput.focus();
+                    return;
+                }
+
+                loading.style.display = 'block';
+                shortenBtn.disabled = true;
+                
+                try {
+                    const response = await fetch('/create_short_link', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `long_link=${encodeURIComponent(longUrl)}`,
+                        credentials: 'include'
+                    });
+                    
+                    if (response.ok) {
+                        const rawResponse = await response.text();
+                        const shortLink = cleanResponse(rawResponse);
+
+                        shortUrl.textContent = shortLink;
+                        shortUrl.href = shortLink;
+                        resultBox.style.display = 'block';
+
+                        resultBox.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        const error = await response.text();
+                        alert(`Ошибка: ${error}`);
+                    }
+                } catch (error) {
+                    console.error('Ошибка:', error);
+                    alert('Произошла ошибка при создании ссылки');
+                } finally {
+                    loading.style.display = 'none';
+                    shortenBtn.disabled = false;
+                }
+            });
+
+            copyBtn.addEventListener('click', function() {
+                navigator.clipboard.writeText(shortUrl.textContent)
+                    .then(() => {
+                        copyBtn.textContent = 'Скопировано!';
+                        setTimeout(() => {
+                            copyBtn.textContent = 'Копировать';
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Ошибка копирования: ', err);
+                    });
+            });
+
+            urlInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    shortenBtn.click();
+                }
+            });
+        });
+    </script>
+{% endblock %}

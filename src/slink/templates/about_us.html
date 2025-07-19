@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}О нас | SLink{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <style>
+        .about-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .about-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        .about-content {
+            margin-bottom: 2rem;
+        }
+
+        .about-content h2 {
+            font-size: 1.8rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--primary);
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 1.2rem;
+            color: var(--text);
+        }
+
+        .contact-info {
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .contact-title {
+            font-size: 1.4rem;
+            margin-bottom: 1.2rem;
+            color: var(--primary);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: var(--primary);
+            width: 40px;
+            text-align: center;
+        }
+
+        .contact-text {
+            flex: 1;
+        }
+
+        .contact-text a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .contact-text a:hover {
+            text-decoration: underline;
+        }
+
+        .team-section {
+            margin-top: 3rem;
+        }
+
+        .team-title {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .team-member {
+            background: rgba(31, 41, 55, 0.5);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+
+        .member-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            margin: 0 auto 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .member-name {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .member-role {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .about-section {
+                padding: 2rem;
+            }
+            
+            .about-title {
+                font-size: 2rem;
+            }
+            
+            .about-subtitle {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .about-section {
+                padding: 1.5rem;
+            }
+            
+            .about-title {
+                font-size: 1.8rem;
+            }
+            
+            .about-content h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="about-section">
+        <div class="about-header">
+            <h1 class="about-title">О нашем сервисе</h1>
+            <p class="about-subtitle">Узнайте больше о SLink и команде, стоящей за ним</p>
+        </div>
+        
+        <div class="about-content">
+            <h2>Наша миссия</h2>
+            <p>SLink создан с целью сделать обмен ссылками простым, удобным и эффективным. Мы верим, что даже самые длинные URL-адреса должны быть доступными и легко делимыми.</p>
+            
+            <h2>Как это работает</h2>
+            <p>Наш сервис берет вашу длинную ссылку и создает короткий, запоминающийся URL-адрес. Каждая сокращенная ссылка является уникальной и перенаправляет пользователей на ваш оригинальный адрес.</p>
+            
+            <h2>Преимущества SLink</h2>
+            <p>• <strong>Простота использования</strong> - сокращение ссылок за считанные секунды<br>
+            • <strong>Надежность</strong> - гарантированная доступность ваших ссылок<br>
+            • <strong>Безопасность</strong> - защита от вредоносных URL<br>
+            
+            <div class="contact-info">
+                <h3 class="contact-title">Контакты</h3>
+                
+                <div class="contact-item">
+                    <div class="contact-text">
+                        <p>Email: <a href="mailto:inksne@gmail.com">inksne@gmail.com</a></p>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-text">
+                        <p>GitHub: <a href="https://github.com/inksne">https://github.com/inksne</a></p>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-text">
+                        <p>GitLab: <a href="https://gitlab.com/inksne">https://gitlab.com/inksne</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="team-section">
+            <h2 class="team-title">Команда разработки</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-photo">I</div>
+                    <h3 class="member-name">inksne</h3>
+                    <p class="member-role">Основатель & Разработчик</p>
+                    <p>Создатель сервиса, backend разработчик</p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
